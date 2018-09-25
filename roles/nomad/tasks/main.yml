@@ -1,0 +1,15 @@
+- block:
+    - name: Checking nomad command
+      shell: /usr/local/bin/nomad version | head -n1 | awk '{ gsub("v","") ; print $2 }'
+      register: verChk
+      changed_when: false
+      failed_when: verChk.stdout is version(nomad.version, operator='lt')
+    # - name: Checking nomad port
+    #   wait_for:
+    #     host: 0.0.0.0
+    #     port: 8600
+    #     timeout: 3
+  rescue:
+    - include_tasks: install.yml
+
+# - include_tasks: config.yml

@@ -1,0 +1,28 @@
+- block:
+    - stat:
+        path: "downloaded_files/nomad-{{ nomad.version }}"
+      register: p
+      failed_when: p.stat.exists == false
+      delegate_to: localhost
+      become: no
+      run_once: true
+  rescue:
+    - name: "Downloading nomad {{ nomad.version }}"
+      unarchive:
+        src: "https://releases.hashicorp.com/nomad/{{ nomad.version }}/nomad_{{ nomad.version }}_linux_amd64.zip"
+        dest: /tmp
+        remote_src: yes
+      register: download
+      until: download is succeeded
+      retries: 99
+      delay: 3
+      delegate_to: localhost
+      become: no
+      run_once: yes
+    - name: Copy the /tmp/nomad into downloaded_files
+      copy:
+        src: /tmp/nomad
+        dest: "downloaded_files/nomad-{{ nomad.version }}"
+      delegate_to: localhost
+      become: no
+      run_once: yes

@@ -1,0 +1,6 @@
+---
+
+nomad:
+  version: 0.8.5
+  consul_servers:
+    - localhost:8500

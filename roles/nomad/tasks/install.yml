@@ -1,0 +1,29 @@
+- block:
+    - name: Uploading command file
+      copy:
+        src: "downloaded_files/nomad-{{ nomad.version }}"
+        dest: /usr/local/bin/nomad
+        mode: 0755
+      # notify: Restart nomad
+    - name: Installing nomad autocomplete
+      command: /usr/local/bin/nomad --autocomplete-install
+      changed_when: false
+  rescue:
+    - include_tasks: download.yml
+    - include_tasks: install.yml
+  always:
+    - name: Creating user 'nomad'
+      user:
+        name: nomad
+    - name: Creating /etc/nomad.d
+      file:
+        path: /etc/nomad.d/
+        state: directory
+        owner: nomad
+        group: nomad
+    - name: Creating /var/lib/nomad
+      file:
+        path: /var/lib/nomad
+        state: directory
+        owner: nomad
+        group: nomad
