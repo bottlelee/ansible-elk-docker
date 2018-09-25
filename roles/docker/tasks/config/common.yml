@@ -1,0 +1,12 @@
+- name: Add kernel swap limit capabilities
+  lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_CMDLINE_LINUX="
+    line: 'GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"'
+  notify: Updating grub
+
+- name: Updating docker daemon config
+  template:
+    src: docker/daemon.json.j2
+    dest: /etc/docker/daemon.json
+  notify: Restart docker service

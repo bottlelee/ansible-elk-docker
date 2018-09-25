@@ -1,0 +1,15 @@
+- block:
+    - name: Checking docker service
+      service:
+        name: docker
+        state: started
+  rescue:
+    - include_tasks: "install/{{ ansible_os_family }}.yml"
+    - name: "Add '{{ ansible_user }}' into 'docker' group"
+      when: "ansible_user != 'root'"
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+- include_tasks: config/common.yml

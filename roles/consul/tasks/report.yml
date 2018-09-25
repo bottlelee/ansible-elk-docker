@@ -1,0 +1,20 @@
+- block:
+    - name: "Fetching /etc/consul.d/*.json to local 'install_report' directory"
+      fetch:
+        src: "/etc/consul.d/{{ item }}.json"
+        dest: "install_report"
+        fail_on_missing: false
+      with_items:
+        - config
+        - elasticsearch
+        - kibana
+        - logstash
+        - redis
+  rescue:
+    - name: "Create local directory install_report/consul"
+      file:
+        path: "install_report"
+        state: directory
+      delegate_to: localhost
+      become: no
+    - include_tasks: report.yml

@@ -1,0 +1,18 @@
+{
+  "services": [
+    {
+      "name": "elastic",
+      "address": "{{ bind_address }}",
+      "port": {{ elastic_http_port }},
+      "enable_tag_override": true,
+      "tags": ["{{ elastic_instance_roles | join('","') }}"],
+      "checks": [
+        {
+          "http": "http://{{ bind_address }}:{{ elastic_http_port }}",
+          "interval": "10s",
+          "timeout": "3s"
+        }
+      ]
+    }
+  ]
+}

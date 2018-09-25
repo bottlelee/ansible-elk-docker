@@ -1,0 +1,16 @@
+{
+  "services": [
+    {
+      "name": "logstash",
+      "address": "{{ bind_address }}",
+      "port": {{ logstash_beats_port }},
+      "checks": [
+        {
+          "tcp": "{{ bind_address }}:{{ logstash_beats_port }}",
+          "interval": "10s",
+          "timeout": "3s"
+        }
+      ]
+    }
+  ]
+}

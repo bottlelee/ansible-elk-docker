@@ -1,0 +1,9 @@
+- hosts: all
+  become: yes
+  serial:
+    - 10%
+    - 30%
+  vars_files:
+    - vars/docker.yml
+  roles:
+    - docker

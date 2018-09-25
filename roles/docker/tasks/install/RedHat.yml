@@ -1,0 +1,20 @@
+- name: Install epel-release
+  yum:
+    name: epel-release
+
+- name: Install dependencies packages
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+
+- name: Add yum repo
+  yum_repository:
+    file: "{{ docker.yum.repository }}"
+
+- name: Installing docker-ce
+  yum:
+    name: docker-ce
+    update_cache: yes

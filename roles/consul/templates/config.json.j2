@@ -1,0 +1,47 @@
+{
+{% if 'esMasters' in group_names %}
+  "server": true,
+  {% if (groups['esMasters'] | count) >= 3 -%}
+  "bootstrap_expect": 3,
+  "retry_join": [
+    {%- for item in groups['esMasters'] if item != ansible_nodename -%}
+      "{{ hostvars[item]['ansible_' + bind_interface]['ipv4']['address'] | default(hostvars[item]['ansible_default_ipv4']['address']) }}"{%- if loop.nextitem is defined -%},{%- endif -%}
+    {%- endfor -%}
+  ],
+  {% endif -%}
+  "ui": true,
+  "client_addr": "0.0.0.0",
+  "performance": {
+    "raft_multiplier": 1
+  },
+  "connect": {
+    "enabled": true
+  },
+{% elif 'esMasters' not in group_names %}
+  "server": false,
+  "retry_join": [
+    {%- for item in groups['esMasters'] -%}
+      "{{ hostvars[item]['ansible_' + bind_interface]['ipv4']['address'] | default(hostvars[item]['ansible_default_ipv4']['address']) }}"{%- if loop.nextitem is defined -%},{%- endif -%}
+    {%- endfor -%}
+  ],
+{% else %}
+  "server": true,
+  "bootstrap": true,
+{% endif %}
+{# ---------------- #}
+  "datacenter": "{{ consul_dc_name }}",
+  "data_dir": "/var/consul",
+  "encrypt": "{{ consul_key }}",
+  "log_level": "err",
+  "enable_syslog": true,
+  "enable_script_checks": true,
+  "bind_addr": "{{ bind_address }}",
+  "addresses": {
+    "dns": "0.0.0.0"
+  },
+  "dns_config": {
+    "service_ttl": {
+      "*": "5s"
+    }
+  }
+}

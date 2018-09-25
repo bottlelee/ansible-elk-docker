@@ -1,0 +1,23 @@
+- name: Install dependencies packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+
+- name: Add apt key
+  apt_key:
+    url: "{{ docker.apt.key }}"
+
+- name: Add apt repository
+  apt_repository:
+    repo: "{{ docker.apt.repository }}"
+    filename: docker-ce
+
+- name: Installing docker
+  apt:
+    name: docker-ce
+    update_cache: yes
