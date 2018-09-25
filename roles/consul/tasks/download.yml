@@ -1,15 +1,15 @@
 - block:
     - stat:
-        path: "downloaded_files/consul-{{ consul_version }}"
+        path: "downloaded_files/consul-{{ consul.version }}"
       register: p
       failed_when: p.stat.exists == false
       delegate_to: localhost
       become: no
       run_once: true
   rescue:
-    - name: "Downloading consul {{ consul_version }}"
+    - name: "Downloading consul {{ consul.version }}"
       unarchive:
-        src: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip"
+        src: "https://releases.hashicorp.com/consul/{{ consul.version }}/consul_{{ consul.version }}_linux_amd64.zip"
         dest: /tmp
         remote_src: yes
       register: download
@@ -22,7 +22,7 @@
     - name: Copy the /tmp/consul into downloaded_files
       copy:
         src: /tmp/consul
-        dest: "downloaded_files/consul-{{ consul_version }}"
+        dest: "downloaded_files/consul-{{ consul.version }}"
       delegate_to: localhost
       become: no
       run_once: yes

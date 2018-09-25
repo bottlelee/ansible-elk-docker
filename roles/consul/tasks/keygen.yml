@@ -4,7 +4,7 @@
       register: keySt
     - name: Write consul key into vars file
       lineinfile:
-        path: roles/deploy.Consul/vars/key.yml
+        path: vars/consul_key.yml
         regexp: '^consul_key'
         line: "consul_key: '{{ keySt.stdout }}'"
         create: yes
