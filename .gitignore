@@ -8,3 +8,4 @@ downloaded_files
 .vagrant
 *.log
 install_report
+vars/consul_key.yml

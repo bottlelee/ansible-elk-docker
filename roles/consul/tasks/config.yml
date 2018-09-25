@@ -1,11 +1,3 @@
-- name: Add current host into 'consulServers'
-  add_host:
-    name: "{{ inventory_hostname }}"
-    groups: consulServers
-  when:
-    - (groups['all'] | count) >= 3
-    - inventory_hostname in (groups['all'][:3] )
-
 - block:
     - include_vars:
         file: vars/consul_key.yml
